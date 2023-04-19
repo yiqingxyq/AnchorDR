@@ -1,0 +1,1 @@
+{"bos_token": "<s>", "eos_token": "</s>", "unk_token": "<unk>", "pad_token": "<pad>", "sep_token": "</s>", "cls_token": "<s>", "lower": true, "n_sentinel_tokens": 512, "tokenizer_class": "FairseqT5Tokenizer"}
