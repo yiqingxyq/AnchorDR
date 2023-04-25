@@ -6,11 +6,11 @@ master_port=${5:-19286}
 
 RESULT_HOME_DIR=$BASE_DIR"/beir_ance"
 
-# for DATASET in arguana climate-fever dbpedia-entity fever fiqa hotpotqa nfcorpus nq quora scidocs scifact trec-covid webis-touche2020
-# do 
-#     echo "evaluating $DATASET ..."
-#     bash evaluate_dataset.sh $model_save_name $model_name_or_path $DATASET $n_gpu $gpus $master_port 
-# done
+for DATASET in arguana climate-fever dbpedia-entity fever fiqa hotpotqa nfcorpus nq quora scidocs scifact trec-covid webis-touche2020
+do 
+    echo "evaluating $DATASET ..."
+    bash evaluate_dataset.sh $model_save_name $model_name_or_path $DATASET $n_gpu $gpus $master_port 
+done
 
 # evaluate CQADupStack 
 for DATASET in android  english  gaming  gis  mathematica  physics  programmers  stats  tex  unix  webmasters  wordpress
