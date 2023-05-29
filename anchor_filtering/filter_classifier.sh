@@ -1,6 +1,5 @@
 # $BASE_DIR: The dir where you put the data and ckpts
 # input_file: ${BASE_DIR}/web_data/web_raw/anchor.tsv
-
 WEB_DATA_DIR=${BASE_DIR}/web_data
 
 STEP2_DIR=${WEB_DATA_DIR}/anchor_rule_filtered_step2

@@ -4,7 +4,6 @@ set -e
 
 # $BASE_DIR: The dir where you put the data and ckpts
 # input_file: ${BASE_DIR}/web_data/web_raw/anchor.tsv
-
 WEB_DATA_DIR=${BASE_DIR}/web_data
 
 IN_DIR=${WEB_DATA_DIR}/web_raw
