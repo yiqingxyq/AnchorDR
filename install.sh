@@ -13,6 +13,12 @@ pip install sacrebleu==2.3.1
 pip install editdistance
 pip install scikit-learn
 
+# requirements for data preprocessing 
+pip install nltk
+pip install unidecode
+python -m spacy download en_core_web_lg
+pip install numba
+
 # install transformers 
 cd ${CODE_DIR}/transformers
 pip install -e .

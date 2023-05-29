@@ -7,14 +7,22 @@ model = AutoModel.from_pretrained('yiqingx/AnchorDR')
 ```
 
 
-## Data preprocessing: Filter anchors by rules and by the classifier
+## Data preprocessing
 
-### Input anchor file
-We follow the file format of ClueWeb. The input file is a `.tsv` file, where each line is a dict representing an anchor:
+First, set the value of `$BASE_DIR` in `setup.sh`
+
+### Input files 
+We follow the file format of ClueWeb. There are two input files:
+```
+anchor.tsv      # the file of anchors
+web_corpus.tsv  # the file of webpages
+```
+
+In `anchor.tsv`, each line is a dict representing an anchor:
 ```
 {
     "url":"https://www.racedepartment.com/downloads/estonia-20.15375/",     # the url of the linked webpage
-    "urlhash":"000002C4D180C769E761169A9938BA86",                           # the urlhash of the linked webpage
+    "urlhash":"000002C4D180C769E761169A9938BA86",                           # the url hash of the linked webpage
     "language":"en",                                                        # the language of the linked webpage
     "anchors":[
         ["https://www.racedepartment.com/downloads/categories/ac-cars.6/?page=16","61BA3D7DB2E598859E086AC148B9B9BD","","","en"],
@@ -23,7 +31,7 @@ We follow the file format of ClueWeb. The input file is a `.tsv` file, where eac
     ],
     # Each anchor is a list, containing:
     #   (1) the url of the source webpage, 
-    #   (2) the urlhash of the source webpage, 
+    #   (2) the url hash of the source webpage, 
     #   (3) the anchor text 
     #   (4) an indicator of header/footer. "" or "0" means it is not a header/footer
     #   (5) the language of the source webpage
@@ -31,16 +39,52 @@ We follow the file format of ClueWeb. The input file is a `.tsv` file, where eac
 
 ```
 
-## Filter anchors by rules and classifier 
-Assume the input file is `${BASE_DIR}/web_data/web_raw/anchor.tsv`, here is the data preprocessing script to filter anchors:
+In `web_corpus.tsv`, each line is a dict representing a webpage:
+```
+{
+    "Url": "https://www.ionos.com/digitalguide/server/tools/netsh/",        # the url of the webpage
+    "UrlHash": "134F6ADC9611D195FCD56F2EE3039ABD",                          # the url hash of the webpage
+    "Language": "en",                                                       # the language of the webpage
+    "Topic": ["linux", "command line interfaces", "web development", ".net framework", "computer programming"], 
+    "Primary": "Netsh – how to manage networks with Netsh commands\nAnyone who works with Windows network configurations will sooner or later come across the Network Shell (Netsh). The term refers to an interface between users and the operating system, which enables the administration and configuration of local, and remote network settings.\nThe range of applications includes settings for the Windows firewall and LAN/WLAN management as well as IP and server configuration ... ",
+    "Title": "Netsh – how to manage networks with Netsh commands", 
+    "HtmlTitle": "netsh commands | How does netsh work? [+examples] - IONOS", 
+    "Rank": 37315,
+}
+
+```
+
+
+### Filter anchors by rules and classifier 
+Assume the input file is `${BASE_DIR}/web_data/web_raw/anchor.tsv`, here is the script to filter anchors:
 ```
 cd anchor_filtering
 bash filter_rules.sh 
 bash filter_classifier.sh
 
 ```
-The filtered anchors will be output to `${BASE_DIR}/web_data/anchor_classifier_filtered/url2anchor_final.pkl`, which is a dict. The keys are urls of the linked webpages and the values are a list of anchor text. 
+The filtered anchors will be output to `${BASE_DIR}/web_data/anchor_classifier_filtered/url2anchor_final.pkl`. This is a dict, where the keys are urls of the linked webpages and the values are a list of anchor text. 
 
+
+### Preprocess linked documents  
+Assume the input file is `${BASE_DIR}/web_data/web_raw/web_corpus.tsv`, here is the data preprocessing script:
+```
+cd doc_preprocessing 
+bash clueweb.sh 
+bash clean_and_split.sh 
+
+```
+The output training file `${BASE_DIR}/web_data/web_corpus/web_corpus.train_clean` contains the cleaned web documents. Each line is a sentence and the documents are separated by one or more '\n'.
+`${BASE_DIR}/web_data/web_corpus/web_corpus.train_url` contains the urls of the web documents (one url per line).
+The output validation files `${BASE_DIR}/web_data/web_corpus/web_corpus.valid_clean` and `${BASE_DIR}/web_data/web_corpus/web_corpus.valid_url` follow the same format.
+
+### Sample anchors 
+Sample at most 5 anchors for each document:
+```
+cd anchor_filtering
+bash sample_anchors.sh
+
+```
 
 
 ## Zero-shot evaluation of MSMARCO and BEIR
