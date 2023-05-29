@@ -7,6 +7,42 @@ model = AutoModel.from_pretrained('yiqingx/AnchorDR')
 ```
 
 
+## Data preprocessing: Filter anchors by rules and by the classifier
+
+### Input anchor file
+We follow the file format of ClueWeb. The input file is a `.tsv` file, where each line is a dict representing an anchor:
+```
+{
+    "url":"https://www.racedepartment.com/downloads/estonia-20.15375/",     # the url of the linked webpage
+    "urlhash":"000002C4D180C769E761169A9938BA86",                           # the urlhash of the linked webpage
+    "language":"en",                                                        # the language of the linked webpage
+    "anchors":[
+        ["https://www.racedepartment.com/downloads/categories/ac-cars.6/?page=16","61BA3D7DB2E598859E086AC148B9B9BD","","","en"],
+        ["https://www.racedepartment.com/downloads/categories/ac-cars.6/?page=16","61BA3D7DB2E598859E086AC148B9B9BD","Estonia-20","","en"],
+        ["https://www.racedepartment.com/downloads/categories/ac-cars.6/?page=16","61BA3D7DB2E598859E086AC148B9B9BD","May 14, 2017","","en"]
+    ],
+    # Each anchor is a list, containing:
+    #   (1) the url of the source webpage, 
+    #   (2) the urlhash of the source webpage, 
+    #   (3) the anchor text 
+    #   (4) an indicator of header/footer. "" or "0" means it is not a header/footer
+    #   (5) the language of the source webpage
+}
+
+```
+
+## Filter anchors by rules and classifier 
+Assume the input file is `${BASE_DIR}/web_data/web_raw/anchor.tsv`, here is the data preprocessing script to filter anchors:
+```
+cd anchor_filtering
+bash filter_rules.sh 
+bash filter_classifier.sh
+
+```
+The filtered anchors will be output to `${BASE_DIR}/web_data/anchor_classifier_filtered/url2anchor_final.pkl`, which is a dict. The keys are urls of the linked webpages and the values are a list of anchor text. 
+
+
+
 ## Zero-shot evaluation of MSMARCO and BEIR
 
 ### Step 1: setup
