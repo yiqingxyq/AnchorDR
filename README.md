@@ -9,6 +9,9 @@ model = AutoModel.from_pretrained('yiqingx/AnchorDR')
 
 ## Data preprocessing
 
+We provide the [preprocessed data](https://drive.google.com/file/d/151v1ZB4jjmQ0XfFlRpiYwNvUtEuix5xr/view?usp=sharing) for continuous pretraining. You can refer to [OpenMatch](https://github.com/OpenMatch/OpenMatch) for the training scripts.
+
+
 First, set the value of `$BASE_DIR` in `setup.sh`
 
 ### Input files 
