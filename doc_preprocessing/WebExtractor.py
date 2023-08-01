@@ -2571,6 +2571,7 @@ def process_dump(input_file, out_file, file_size, file_compress,
 
     if url_subset_file is not None:
         url_subset = pickle.load(open(url_subset_file, 'rb'))
+        url_subset = {x.replace('\n','') for x in url_set}
 
     if input_file == '-':
         input = sys.stdin
@@ -2625,6 +2626,7 @@ def process_dump(input_file, out_file, file_size, file_compress,
     page_num = 0
     for page_data in my_extract(input):
         title, page, lang, url = page_data
+        url = url.replace('\n', '')
         if lang != 'en':
             continue
         if url_subset_file is not None:
