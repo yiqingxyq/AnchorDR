@@ -25,6 +25,8 @@ PER_DEVICE_INFERENCE_BATCH_SIZE=64
 Q_MAX_LEN=64
 P_MAX_LEN=128
 
+
+
 if [ "$dataset_name" == "arguana" ]; then 
     Q_MAX_LEN=128 
 fi
@@ -84,6 +86,8 @@ else
         --dataloader_num_workers 1
 fi
 
+# In Arguana, some queries are also documents, so when we retrieve for a query, we remove the documents that are the same as the query.
+# You can check https://github.com/Veronicium/AnchorDR/blob/main/beir/evaluate_dataset.sh for details
 if [ "$dataset_name" == "arguana" ]; then
     mv $RESULT_DIR/beir/$dataset_name/$model_save_name/test.trec $RESULT_DIR/beir/$dataset_name/$model_save_name/test.orig.trec
     python $BEIR_DIR/remove_same_qd.py \
